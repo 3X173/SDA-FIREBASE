@@ -2,9 +2,11 @@
   "name": "sda-firebase",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": ".src/app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "webpack serve --mode development",
+    "dev": "webpack --mode development",
+    "prod": "webpack --mode production"
   },
   "repository": {
     "type": "git",
@@ -23,5 +25,8 @@
     "webpack": "^5.76.1",
     "webpack-cli": "^5.0.1",
     "webpack-dev-server": "^4.11.1"
+  },
+  "dependencies": {
+    "firebase": "^9.17.2"
   }
 }
