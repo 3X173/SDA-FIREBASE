@@ -15,5 +15,13 @@
   "bugs": {
     "url": "https://github.com/3X173/SDA-FIREBASE/issues"
   },
-  "homepage": "https://github.com/3X173/SDA-FIREBASE#readme"
+  "homepage": "https://github.com/3X173/SDA-FIREBASE#readme",
+  "devDependencies": {
+    "css-loader": "^6.7.3",
+    "html-webpack-plugin": "^5.5.0",
+    "style-loader": "^3.3.1",
+    "webpack": "^5.76.1",
+    "webpack-cli": "^5.0.1",
+    "webpack-dev-server": "^4.11.1"
+  }
 }
