@@ -87,7 +87,13 @@ document.getElementById("myBtn").addEventListener("click", ()=> {
 
 uploadBytes(imageRef, file).then(() => {
     headerInfo.innerText = "Zdjęcie przesłane!";
-  })
+
+    getDownloadURL(imageRef).then(url => {
+      const img = document.getElementById("myPhoto");
+      img.src = url;
+      img.style.width = "250px";
+    })
+  }) 
 })
 
 // POBIERANIE ZDJĘCIA
@@ -107,19 +113,19 @@ uploadBytes(imageRef, file).then(() => {
 // 4. Przekazac nazwe do refa
 // 5. Wyswietlic blad w headerInfo
 
-const myShowFileNameInput = document.getElementById("myShowFileName");
-const showFileBtn = document.getElementById("showPhotoBtn");
+// const myShowFileNameInput = document.getElementById("myShowFileName");
+// const showFileBtn = document.getElementById("showPhotoBtn");
 
-showFileBtn.addEventListener("click", () => {
-  const imageRef = ref(storage, myShowFileNameInput.value);
+// showFileBtn.addEventListener("click", () => {
+//   const imageRef = ref(storage, myShowFileNameInput.value);
 
-getDownloadURL(imageRef).then(url => {
-  const img = document.createElement("img");
-  img.src = url;
-  img.style.width = "250px";
-  document.body.appendChild(img);
-})
-  .catch(ex => {
-    headerInfo.innerText = "FOTO NIE ISTNIEJE!";
-  });
-});
+// getDownloadURL(imageRef).then(url => {
+//   const img = document.createElement("img");
+//   img.src = url;
+//   img.style.width = "250px";
+//   document.body.appendChild(img);
+// })
+//   .catch(ex => {
+//     headerInfo.innerText = "FOTO NIE ISTNIEJE!";
+//   });
+// });
