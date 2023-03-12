@@ -1,7 +1,7 @@
 import './../styles/styles.css';
 
 import { initializeApp } from 'firebase/app';
-import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
+import { getDownloadURL, getStorage, listAll, ref, uploadBytes } from "firebase/storage";
 
 // Import the functions you need from the SDKs you need
 // TODO: Add SDKs for Firebase products that you want to use
@@ -70,31 +70,31 @@ const storage = getStorage(app);
 // 2. Pobrać wpisaną nazwę z inputa
 // 3. Przekazać jako argument do funkcji
 // 4. Callback do domyślnej nazwy pliku
-const headerInfo = document.getElementById("myHeader");
-const fileNameInput = document.getElementById("myText");
+// const headerInfo = document.getElementById("myHeader");
+// const fileNameInput = document.getElementById("myText");
 
-document.getElementById("myBtn").addEventListener("click", ()=> {
-  headerInfo.innerText = "Przesyłam zdjęcie...";
+// document.getElementById("myBtn").addEventListener("click", ()=> {
+//   headerInfo.innerText = "Przesyłam zdjęcie...";
 
-  const file = document.getElementById("myFile").files[0];
-  let fileName = file.name;
+//   const file = document.getElementById("myFile").files[0];
+//   let fileName = file.name;
 
-  if(fileNameInput.value){
-    fileName = fileNameInput.value;
-  }
+//   if(fileNameInput.value){
+//     fileName = fileNameInput.value;
+//   }
 
-  const imageRef = ref(storage, fileName);
+//   const imageRef = ref(storage, fileName);
 
-uploadBytes(imageRef, file).then(() => {
-    headerInfo.innerText = "Zdjęcie przesłane!";
+// uploadBytes(imageRef, file).then(() => {
+//     headerInfo.innerText = "Zdjęcie przesłane!";
 
-    getDownloadURL(imageRef).then(url => {
-      const img = document.getElementById("myPhoto");
-      img.src = url;
-      img.style.width = "250px";
-    })
-  }) 
-})
+//     getDownloadURL(imageRef).then(url => {
+//       const img = document.getElementById("myPhoto");
+//       img.src = url;
+//       img.style.width = "250px";
+//     })
+//   }) 
+// })
 
 // POBIERANIE ZDJĘCIA
 
@@ -129,3 +129,17 @@ uploadBytes(imageRef, file).then(() => {
 //     headerInfo.innerText = "FOTO NIE ISTNIEJE!";
 //   });
 // });
+
+const storageRef = ref(storage);
+listAll(storageRef).then(res => {
+  const myOl = document.getElementById("photoList");
+
+  for (let i = 0; i < res.items.length; i++) {
+    const myLi = document.createElement("li");
+    myLi.innerText = res.items[i].name;
+    myOl.appendChild(myLi);
+    console.log(res.items[i].name);
+  }
+});
+
+
