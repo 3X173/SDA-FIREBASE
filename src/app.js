@@ -1,7 +1,7 @@
 import './../styles/styles.css';
 
 import { initializeApp } from 'firebase/app';
-import { getStorage, ref, uploadBytes } from "firebase/storage";
+import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 
 // Import the functions you need from the SDKs you need
 // TODO: Add SDKs for Firebase products that you want to use
@@ -90,3 +90,36 @@ uploadBytes(imageRef, file).then(() => {
   })
 })
 
+// POBIERANIE ZDJĘCIA
+
+// const imageRef = ref(storage, "WTF.jpg");
+// getDownloadURL(imageRef).then(url => {
+//   const img = document.createElement("img");
+//   img.src = url;
+//   img.style.width = "250px";
+//   document.body.appendChild(img);
+// })
+
+// ~~~~~~~~ZADANIE 3~~~~~~~~~~
+// 1. Dodac Input do podawania nazwy obrazka
+// 2. Dodac przycisk do wyswietlania obrazka
+// 3. Na klikniecie przycisku wyswietlic zdjecie
+// 4. Przekazac nazwe do refa
+// 5. Wyswietlic blad w headerInfo
+
+const myShowFileNameInput = document.getElementById("myShowFileName");
+const showFileBtn = document.getElementById("showPhotoBtn");
+
+showFileBtn.addEventListener("click", () => {
+  const imageRef = ref(storage, myShowFileNameInput.value);
+
+getDownloadURL(imageRef).then(url => {
+  const img = document.createElement("img");
+  img.src = url;
+  img.style.width = "250px";
+  document.body.appendChild(img);
+})
+  .catch(ex => {
+    headerInfo.innerText = "FOTO NIE ISTNIEJE!";
+  });
+});
