@@ -46,17 +46,44 @@ const storage = getStorage(app);
 // .then((daneeZPromisa) => daneeZPromisa.json())
 // .then((daneZJson) => console.log(daneZJson.data));
 
+
+// ~~~~~~~~ZADANIE 1~~~~~~~~~~~~
 // 1. Dodajemy input do HTML - typ file
 // 2. Dodajemy przycisk do HTML
 // 3. Do przycisku dodajemy obsługę kliknięcia
 // 4. Jako call back wywołujemy linijki z prezentacji 
 
+// const headerInfo = document.getElementById("myHeader");
+// document.getElementById("myBtn").addEventListener("click", ()=> {
+//   headerInfo.innerText = "Przesyłam zdjęcie...";
+
+//   const file = document.getElementById("myFile").files[0];
+//   const imageRef = ref(storage, "imageNew.jpg");
+
+// uploadBytes(imageRef, file).then(() => {
+//     headerInfo.innerText = "Zdjęcie przesłane!";
+//   })
+// })
+
+// ~~~~~~~~ZADANIE 2~~~~~~~~~~~~
+// 1. Dodać input do HTMLa
+// 2. Pobrać wpisaną nazwę z inputa
+// 3. Przekazać jako argument do funkcji
+// 4. Callback do domyślnej nazwy pliku
 const headerInfo = document.getElementById("myHeader");
+const fileNameInput = document.getElementById("myText");
+
 document.getElementById("myBtn").addEventListener("click", ()=> {
   headerInfo.innerText = "Przesyłam zdjęcie...";
 
   const file = document.getElementById("myFile").files[0];
-  const imageRef = ref(storage, "imageNew.jpg");
+  let fileName = file.name;
+
+  if(fileNameInput.value){
+    fileName = fileNameInput.value;
+  }
+
+  const imageRef = ref(storage, fileName);
 
 uploadBytes(imageRef, file).then(() => {
     headerInfo.innerText = "Zdjęcie przesłane!";
