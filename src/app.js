@@ -1,7 +1,7 @@
 import './../styles/styles.css';
 
 import { initializeApp } from 'firebase/app';
-import { getDownloadURL, getStorage, listAll, ref, uploadBytes } from "firebase/storage";
+import { deleteObject, getDownloadURL, getStorage, listAll, ref, uploadBytes } from "firebase/storage";
 
 // Import the functions you need from the SDKs you need
 // TODO: Add SDKs for Firebase products that you want to use
@@ -137,7 +137,9 @@ listAll(storageRef).then(res => {
   for (let i = 0; i < res.items.length; i++) {
     const myLi = document.createElement("li");
     const myBtn = document.createElement("button");
+    const myDelBtn = document.createElement("button");
 
+  
     myBtn.addEventListener("click", () => {
       const imageRef = ref(storage, res.items[i].name);
       getDownloadURL(imageRef).then(url => {
@@ -148,11 +150,22 @@ listAll(storageRef).then(res => {
       
     }) 
 
+    myDelBtn.addEventListener("click", () => {
+      const imageRef = ref(storage, res.items[i].name);
+
+      deleteObject(imageRef).then(() => {
+        console.log("Usunięto!")
+      });
+
+    })
+
     myBtn.innerText = "Show photo!";
     myLi.innerText = res.items[i].name;
+    myDelBtn.innerText = "Remove!";
 
     myLi.appendChild(myBtn);
     myOl.appendChild(myLi);
+    myLi.appendChild(myDelBtn);
 
     console.log(res.items[i].name);
   }
