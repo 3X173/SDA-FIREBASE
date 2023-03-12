@@ -25,3 +25,22 @@ const url ="https://firebasestorage.googleapis.com/v0/b/sda-firebase-kamil.appsp
 const img = document.createElement("img");
 img.src = url;
 document.body.appendChild(img);
+
+// function mojaFunkcja(callback) {
+//   callback();
+// }
+
+// document.body.addEventListener("click", () => {
+//   console.log("callback");
+// }
+
+// const mojaPupaJson = fetch().then((pupa123) => pupa123.json());
+// mojaPupaJson.then((data) => console.log(data))
+
+// fetch("https://reqres.in/api/users")
+// .then((pupa123) => pupa123.json())
+// .then((data) => console.log(data));
+
+fetch("https://reqres.in/api/users")
+.then((daneeZPromisa) => daneeZPromisa.json())
+.then((daneZJson) => console.log(daneZJson.data));
