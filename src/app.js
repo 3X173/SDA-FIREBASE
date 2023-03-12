@@ -138,6 +138,10 @@ listAll(storageRef).then(res => {
     const myLi = document.createElement("li");
     const myBtn = document.createElement("button");
 
+    myBtn.addEventListener("click", () => {
+      console.log("Siemanko");
+    }); 
+
     myBtn.innerText = "Show photo!";
     myLi.innerText = res.items[i].name;
 
