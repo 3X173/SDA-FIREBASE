@@ -139,8 +139,14 @@ listAll(storageRef).then(res => {
     const myBtn = document.createElement("button");
 
     myBtn.addEventListener("click", () => {
-      console.log("Siemanko");
-    }); 
+      const imageRef = ref(storage, res.items[i].name);
+      getDownloadURL(imageRef).then(url => {
+      const myPhotos = document.getElementById("myPhotos");
+      myPhotos.src = url;
+      myPhotos.style.width = "100px";
+      });
+      
+    }) 
 
     myBtn.innerText = "Show photo!";
     myLi.innerText = res.items[i].name;
