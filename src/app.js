@@ -130,45 +130,54 @@ const storage = getStorage(app);
 //   });
 // });
 
-const storageRef = ref(storage);
-listAll(storageRef).then(res => {
-  const myOl = document.getElementById("PhotoList");
+// const storageRef = ref(storage);
+// listAll(storageRef).then(res => {
+//   const myOl = document.getElementById("PhotoList");
 
-  for (let i = 0; i < res.items.length; i++) {
-    const myLi = document.createElement("li");
-    const myBtn = document.createElement("button");
-    const myDelBtn = document.createElement("button");
+//   for (let i = 0; i < res.items.length; i++) {
+//     const myLi = document.createElement("li");
+//     const myBtn = document.createElement("button");
+//     const myDelBtn = document.createElement("button");
 
   
-    myBtn.addEventListener("click", () => {
-      const imageRef = ref(storage, res.items[i].name);
-      getDownloadURL(imageRef).then(url => {
-      const myPhotos = document.getElementById("myPhotos");
-      myPhotos.src = url;
-      myPhotos.style.width = "100px";
-      });
+//     myBtn.addEventListener("click", () => {
+//       const imageRef = ref(storage, res.items[i].name);
+//       getDownloadURL(imageRef).then(url => {
+//       const myPhotos = document.getElementById("myPhotos");
+//       myPhotos.src = url;
+//       myPhotos.style.width = "100px";
+//       });
       
-    }) 
+//     }) 
 
-    myDelBtn.addEventListener("click", () => {
-      const imageRef = ref(storage, res.items[i].name);
+//     myDelBtn.addEventListener("click", () => {
+//       const imageRef = ref(storage, res.items[i].name);
 
-      deleteObject(imageRef).then(() => {
-        console.log("Usunięto!")
-      });
+//       deleteObject(imageRef).then(() => {
+//         console.log("Usunięto!")
+//       });
 
-    })
+//     })
 
-    myBtn.innerText = "Show photo!";
-    myLi.innerText = res.items[i].name;
-    myDelBtn.innerText = "Remove!";
+//     myBtn.innerText = "Show photo!";
+//     myLi.innerText = res.items[i].name;
+//     myDelBtn.innerText = "Remove!";
 
-    myLi.appendChild(myBtn);
-    myOl.appendChild(myLi);
-    myLi.appendChild(myDelBtn);
+//     myLi.appendChild(myBtn);
+//     myOl.appendChild(myLi);
+//     myLi.appendChild(myDelBtn);
 
-    console.log(res.items[i].name);
-  }
-});
+//     console.log(res.items[i].name);
+//   }
+// });
 
+const albumsList = document.getElementById("albumsList");
+const storageRef = ref(storage);
+listAll(storageRef).then(res => {
+  res.prefixes.forEach(pref => {
+    const albumOption = document.createElement("option");
+    albumOption.innerText = pref.name;
+    albumsList.appendChild(albumOption);
+  })
+})
 
