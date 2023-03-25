@@ -171,10 +171,54 @@ const storage = getStorage(app);
 //   }
 // });
 
+// tworzymy listę albumów
 const albumsList = document.getElementById("albumsList");
+// tworzymy przycisk
+const uploadPhotoBtn = document.getElementById("uploadPhoto");
+// tworzymy input
+const fileInput = document.getElementById("fileInput");
+// tworzymy drugi przycisk
+const showPhotoBtn = document.getElementById("showPhotos");
+
+// tworzymy event listener na przycisku
+uploadPhotoBtn.addEventListener("click", () => {
+  if (albumsList.value) {
+    // dodajemy file
+    const file = fileInput.files[0];
+    // tworzymy obraz i referancje do niego
+    const imageRef = ref(storage, `${albumsList.value}/${file.name}`);
+    // wysyłamy obraz do odpowiedniego miejsca w storage
+    uploadBytes(imageRef, file).then(() => console.log("Suckes!"));
+  }
+});
+
+showPhotoBtn.addEventListener("click", () => {
+  const albumRef = ref(storage, albumsList.value);
+  listAll(albumRef).then(res => {
+    res.items.forEach(item => {
+      const itemRef = ref(storage, item.fullPath);
+
+      getDownloadURL(itemRef).then(url => {
+        const img = document.createElement("img");
+        img.src = url;
+        img.style.width = "200px";
+        document.body.appendChild(img);
+      })
+    })
+  })
+})
+// listAll na referencji na album - const albumRef = ref(storage, albumsList.value);
+// Wewnatrz listAll - iterujemy po items
+// dla kazdego items tworzymy referencje - const itemRef = ref(storage, items[i].name);
+// korzystamy z getDownloadUrl
+// wewnatrz getDownloadUrl tworzymy IMG (za pomoca createElement) i dodaje src do img 
+// document.body.appendChild(img);
+
+// tworzymy referencje do storage
 const storageRef = ref(storage);
 listAll(storageRef).then(res => {
   res.prefixes.forEach(pref => {
+    // tworzymy opcje do select
     const albumOption = document.createElement("option");
     albumOption.innerText = pref.name;
     albumsList.appendChild(albumOption);
