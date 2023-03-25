@@ -2,6 +2,7 @@ import './../styles/styles.css';
 
 import { initializeApp } from 'firebase/app';
 import { deleteObject, getDownloadURL, getStorage, listAll, ref, uploadBytes } from "firebase/storage";
+import { addDoc, collection, doc, getDoc, getFirestore, setDoc } from "firebase/firestore";
 
 // Import the functions you need from the SDKs you need
 // TODO: Add SDKs for Firebase products that you want to use
@@ -20,6 +21,8 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const storage = getStorage(app);
+// inizjalizacja bazy danych
+const db = getFirestore(app);
 
 // const url ="https://firebasestorage.googleapis.com/v0/b/sda-firebase-kamil.appspot.com/o/1643667975347.jpg?alt=media&token=d25c51ee-ae76-48a3-aabf-31237e6511c4";
 
@@ -171,57 +174,94 @@ const storage = getStorage(app);
 //   }
 // });
 
-// tworzymy listę albumów
-const albumsList = document.getElementById("albumsList");
-// tworzymy przycisk
-const uploadPhotoBtn = document.getElementById("uploadPhoto");
-// tworzymy input
-const fileInput = document.getElementById("fileInput");
-// tworzymy drugi przycisk
-const showPhotoBtn = document.getElementById("showPhotos");
+// // tworzymy listę albumów
+// const albumsList = document.getElementById("albumsList");
+// // tworzymy przycisk
+// const uploadPhotoBtn = document.getElementById("uploadPhoto");
+// // tworzymy input
+// const fileInput = document.getElementById("fileInput");
+// // tworzymy drugi przycisk
+// const showPhotoBtn = document.getElementById("showPhotos");
 
-// tworzymy event listener na przycisku
-uploadPhotoBtn.addEventListener("click", () => {
-  if (albumsList.value) {
-    // dodajemy file
-    const file = fileInput.files[0];
-    // tworzymy obraz i referancje do niego
-    const imageRef = ref(storage, `${albumsList.value}/${file.name}`);
-    // wysyłamy obraz do odpowiedniego miejsca w storage
-    uploadBytes(imageRef, file).then(() => console.log("Suckes!"));
-  }
-});
+// // tworzymy event listener na przycisku
+// uploadPhotoBtn.addEventListener("click", () => {
+//   if (albumsList.value) {
+//     // dodajemy file
+//     const file = fileInput.files[0];
+//     // tworzymy obraz i referancje do niego
+//     const imageRef = ref(storage, `${albumsList.value}/${file.name}`);
+//     // wysyłamy obraz do odpowiedniego miejsca w storage
+//     uploadBytes(imageRef, file).then(() => console.log("Suckes!"));
+//   }
+// });
 
-showPhotoBtn.addEventListener("click", () => {
-  const albumRef = ref(storage, albumsList.value);
-  listAll(albumRef).then(res => {
-    res.items.forEach(item => {
-      const itemRef = ref(storage, item.fullPath);
+// showPhotoBtn.addEventListener("click", () => {
+//   const albumRef = ref(storage, albumsList.value);
+//   listAll(albumRef).then(res => {
+//     res.items.forEach(item => {
+//       const itemRef = ref(storage, item.fullPath);
 
-      getDownloadURL(itemRef).then(url => {
-        const img = document.createElement("img");
-        img.src = url;
-        img.style.width = "200px";
-        document.body.appendChild(img);
-      })
-    })
-  })
+//       getDownloadURL(itemRef).then(url => {
+//         const img = document.createElement("img");
+//         img.src = url;
+//         img.style.width = "200px";
+//         document.body.appendChild(img);
+//       })
+//     })
+//   })
+// })
+// // listAll na referencji na album - const albumRef = ref(storage, albumsList.value);
+// // Wewnatrz listAll - iterujemy po items
+// // dla kazdego items tworzymy referencje - const itemRef = ref(storage, items[i].name);
+// // korzystamy z getDownloadUrl
+// // wewnatrz getDownloadUrl tworzymy IMG (za pomoca createElement) i dodaje src do img 
+// // document.body.appendChild(img);
+
+// // tworzymy referencje do storage
+// const storageRef = ref(storage);
+// listAll(storageRef).then(res => {
+//   res.prefixes.forEach(pref => {
+//     // tworzymy opcje do select
+//     const albumOption = document.createElement("option");
+//     albumOption.innerText = pref.name;
+//     albumsList.appendChild(albumOption);
+//   })
+// })
+
+// // dodanie inputów
+// const nameInput = document.getElementById("name");
+// const surnameInput = document.getElementById("surname");
+// const ageInput = document.getElementById("age");
+// const addUserBtn = document.getElementById("addUser");
+
+// addUserBtn.addEventListener("click", () => {
+//   const jkDoc = doc(db, "users", `${nameInput.value}${surnameInput.value}${ageInput.value}`);
+// setDoc(jkDoc, {
+//     name: nameInput.value,
+//     surname: surnameInput.value,
+//     age: ageInput.value
+//   });
+// })
+
+// const kamilDoc = doc(db, "users", "KamilAdamczyk28");
+// getDoc(kamilDoc).then(resDoc => {
+//   const kamil = resDoc.data();
+//   nameInput.value = kamil.name;
+//   surnameInput.value = kamil.surname;
+//   ageInput.value = kamil.age;
+// })
+
+const nameInput = document.getElementById("name");
+const surnameInput = document.getElementById("surname");
+const ageInput = document.getElementById("age");
+const addUserBtn = document.getElementById("addUser");
+
+
+addUserBtn.addEventListener("click", () => {
+  const usersCollection = collection(db, "users");
+  addDoc(usersCollection, {
+    name: nameInput.value,
+    surname: surnameInput.value,
+    age: ageInput.value
+  }) 
 })
-// listAll na referencji na album - const albumRef = ref(storage, albumsList.value);
-// Wewnatrz listAll - iterujemy po items
-// dla kazdego items tworzymy referencje - const itemRef = ref(storage, items[i].name);
-// korzystamy z getDownloadUrl
-// wewnatrz getDownloadUrl tworzymy IMG (za pomoca createElement) i dodaje src do img 
-// document.body.appendChild(img);
-
-// tworzymy referencje do storage
-const storageRef = ref(storage);
-listAll(storageRef).then(res => {
-  res.prefixes.forEach(pref => {
-    // tworzymy opcje do select
-    const albumOption = document.createElement("option");
-    albumOption.innerText = pref.name;
-    albumsList.appendChild(albumOption);
-  })
-})
-
