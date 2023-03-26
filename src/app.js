@@ -3,16 +3,16 @@ import './../styles/styles.css';
 import { initializeApp } from "firebase/app";
 import { deleteObject, getDownloadURL, getStorage, listAll, ref, uploadBytes } from "firebase/storage";
 import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, getFirestore, query, setDoc, updateDoc, where } from "firebase/firestore"
-import { getDatabase, ref as rdbRef, set } from "firebase/database";
+import { getDatabase, onChildAdded, onValue, push, ref as rdbRef, set } from "firebase/database";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyDaiX1VIEn2i68FEcHeqdFEIXloEqL3uFg",
-  authDomain: "sda-firebase-21.firebaseapp.com",
-  projectId: "sda-firebase-21",
+  apiKey: "AIzaSyA24_50LO4dJ58Q9CAB39GYvTXYMWN-AGs",
+  authDomain: "sda-firebase-kamil.firebaseapp.com",
   databaseURL: "https://sda-firebase-kamil-default-rtdb.europe-west1.firebasedatabase.app",
-  storageBucket: "sda-firebase-21.appspot.com",
-  messagingSenderId: "669851038876",
-  appId: "1:669851038876:web:e4d993ab1a6ba5ead12959",
+  projectId: "sda-firebase-kamil",
+  storageBucket: "sda-firebase-kamil.appspot.com",
+  messagingSenderId: "584729761029",
+  appId: "1:584729761029:web:2e1c8c7d9bdf12b21bd36",
   
 };
 
@@ -323,8 +323,65 @@ const rdb = getDatabase(app);
 //   })
 // })
 
-const janKowalski = ref(rdb, "users/JanId");
-set(janKowalski, {
-  name: "Jan",
-  surname: "Kowalski"
+// const janRef = ref(rdb,"users/JanId");
+// set(janRef, {
+//   name: "Jan",
+//   surname: "Kowalski",
+// })
+
+// const usersRef = rdbRef(rdb, "users");
+// const janRef = push(usersRef);
+
+// set(janRef, {
+//   name: "NowyJan",
+//   surname: "NowyKowalski"
+// })
+
+// ************** SNAPSHOT
+
+// const usersRef = rdbRef(rdb, "users");
+// onValue(usersRef, snapshot => {
+//   console.log(snapshot);
+//   const myUsers = snapshot.val();
+
+//   for(let prop in myUsers){
+//     console.log(prop);
+//   }
+// })
+
+// const usersRef = rdbRef(rdb, "users");
+// onChildAdded(usersRef, snapshot => {
+  
+//   const myUsers = snapshot.val();
+//   console.log(myUsers);
+
+//   for(let prop in myUsers){
+//     console.log(prop);
+//   }
+// })
+
+
+// *********** ROBIMY MINI CHAT Z UZYCIEM onCHILDAdded
+const sendBtn = document.getElementById("send");
+const messageTextInput = document.getElementById("message");
+const messageContainer = document.getElementById("messageContainer");
+
+const messagesRef = rdbRef(rdb, "messages");
+
+onChildAdded(messagesRef, (messageSnapshot) => {
+  const mySpan = document.createElement("span");
+  const message = messageSnapshot.val();
+
+  mySpan.innerText = `${message.timestamp} --- ${message.text}`;
+
+  messageContainer.appendChild(mySpan);
+})
+
+sendBtn.addEventListener("click", () => {
+  const messageRef = push(messagesRef);
+
+  set(messageRef, {
+    text: messageTextInput.value,
+    timestamp: new Date().toISOString()
+  })
 })
