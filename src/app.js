@@ -4,6 +4,8 @@ import { initializeApp } from "firebase/app";
 import { deleteObject, getDownloadURL, getStorage, listAll, ref, uploadBytes } from "firebase/storage";
 import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, getFirestore, query, setDoc, updateDoc, where } from "firebase/firestore"
 import { getDatabase, onChildAdded, onValue, push, ref as rdbRef, set } from "firebase/database";
+import { getAuth, EmailAuthProvider } from "firebase/auth";
+import * as firebaseui from 'firebaseui';
 
 const firebaseConfig = {
   apiKey: "AIzaSyA24_50LO4dJ58Q9CAB39GYvTXYMWN-AGs",
@@ -20,7 +22,11 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const storage = getStorage(app);
 const db = getFirestore(app);
+// Inicjalizacja Relative DB
 const rdb = getDatabase(app);
+// Inicjalizacja Firestore Auth
+const auth = getAuth(app);
+const ui = new firebaseui.auth.AuthUI(auth);
 
 // const url = "https://firebasestorage.googleapis.com/v0/b/sda-firebase-21.appspot.com/o/Zdj%C4%99cieCV.png?alt=media&token=8debca9e-3f19-49d2-b5dd-74f23ba75890";
 
@@ -385,3 +391,10 @@ sendBtn.addEventListener("click", () => {
     timestamp: new Date().toISOString()
   })
 })
+
+ui.start('#firebaseui-auth-container', {
+  signInOptions: [
+      EmailAuthProvider.PROVIDER_ID
+  ],
+  signInSuccessUrl: "http://localhost:8080/"
+});
