@@ -1,43 +1,37 @@
 import './../styles/styles.css';
 
-import { initializeApp } from 'firebase/app';
+import { initializeApp } from "firebase/app";
 import { deleteObject, getDownloadURL, getStorage, listAll, ref, uploadBytes } from "firebase/storage";
-import { addDoc, collection, doc, getDoc, getFirestore, setDoc } from "firebase/firestore";
+import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, getFirestore, query, setDoc, updateDoc, where } from "firebase/firestore"
+import { getDatabase, ref as rdbRef, set } from "firebase/database";
 
-// Import the functions you need from the SDKs you need
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
-
-// Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyA24_50LO4dJ58Q9CAB39GYvTXYMWN-AGs",
-  authDomain: "sda-firebase-kamil.firebaseapp.com",
-  projectId: "sda-firebase-kamil",
-  storageBucket: "sda-firebase-kamil.appspot.com",
-  messagingSenderId: "584729761029",
-  appId: "1:584729761029:web:2e1c8c7d9bdf12b21bd36c"
+  apiKey: "AIzaSyDaiX1VIEn2i68FEcHeqdFEIXloEqL3uFg",
+  authDomain: "sda-firebase-21.firebaseapp.com",
+  projectId: "sda-firebase-21",
+  databaseURL: "https://sda-firebase-kamil-default-rtdb.europe-west1.firebasedatabase.app",
+  storageBucket: "sda-firebase-21.appspot.com",
+  messagingSenderId: "669851038876",
+  appId: "1:669851038876:web:e4d993ab1a6ba5ead12959",
+  
 };
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const storage = getStorage(app);
-// inizjalizacja bazy danych
 const db = getFirestore(app);
+const rdb = getDatabase(app);
 
-// const url ="https://firebasestorage.googleapis.com/v0/b/sda-firebase-kamil.appspot.com/o/1643667975347.jpg?alt=media&token=d25c51ee-ae76-48a3-aabf-31237e6511c4";
+// const url = "https://firebasestorage.googleapis.com/v0/b/sda-firebase-21.appspot.com/o/Zdj%C4%99cieCV.png?alt=media&token=8debca9e-3f19-49d2-b5dd-74f23ba75890";
 
 // const img = document.createElement("img");
 // img.src = url;
 // document.body.appendChild(img);
 
-// function mojaFunkcja(callback) {
-//   callback();
-// }
 
-// document.body.addEventListener("click", () => {
-//   console.log("callback");
-// }
-
+// // const mojaPupaJson = fetch().then((pupa123) => {
+// //   return pupa123.json()
+// // });
 // const mojaPupaJson = fetch().then((pupa123) => pupa123.json());
 // mojaPupaJson.then((data) => console.log(data))
 
@@ -45,157 +39,148 @@ const db = getFirestore(app);
 // .then((pupa123) => pupa123.json())
 // .then((data) => console.log(data));
 
+// async function mojAsynchronicznaFunkcja() {
+//   const pupa123 = await fetch();
+//   const data = await pupa123.json();
+//   console.log(data);
+// }
+
 // fetch("https://reqres.in/api/users")
-// .then((daneeZPromisa) => daneeZPromisa.json())
+// .then((daneZPromisa) => daneZPromisa.json())
 // .then((daneZJson) => console.log(daneZJson.data));
 
+// async function myFunc () {
+//   const data = await fetch("https://reqres.in/api/users")
+//   const users = await data.json();
+//   console.log(users.data);
+// }
 
-// ~~~~~~~~ZADANIE 1~~~~~~~~~~~~
-// 1. Dodajemy input do HTML - typ file
-// 2. Dodajemy przycisk do HTML
-// 3. Do przycisku dodajemy obsługę kliknięcia
-// 4. Jako call back wywołujemy linijki z prezentacji 
+//1. Dodajemy input do HTMLu - typ file
+//2. Dodajemy przycisk do HTML 
+//3. Do przycisku obsluga klikniecia 
+//4. Jako callback wywolujemy linijki z prezentacji
 
 // const headerInfo = document.getElementById("myHeader");
-// document.getElementById("myBtn").addEventListener("click", ()=> {
-//   headerInfo.innerText = "Przesyłam zdjęcie...";
+// document.getElementById("myBtn").addEventListener("click", () => {
+//   headerInfo.innerText = "Przesyłam zdjęcię....!";
 
 //   const file = document.getElementById("myFile").files[0];
-//   const imageRef = ref(storage, "imageNew.jpg");
+//   const imageRef = ref(storage, file.name);
 
-// uploadBytes(imageRef, file).then(() => {
-//     headerInfo.innerText = "Zdjęcie przesłane!";
+//   uploadBytes(imageRef, file).then(() => {
+//     headerInfo.innerText = "Zdjęcie przesłano!";
 //   })
 // })
 
-// ~~~~~~~~ZADANIE 2~~~~~~~~~~~~
+
 // 1. Dodać input do HTMLa
-// 2. Pobrać wpisaną nazwę z inputa
-// 3. Przekazać jako argument do funkcji
-// 4. Callback do domyślnej nazwy pliku
+// 2. Pobrac wpisana nazwe z inputa
+// 3. Przekazac jako argument do funckji
+// 4. Fallback do domyślnej nazwy pliku
 // const headerInfo = document.getElementById("myHeader");
-// const fileNameInput = document.getElementById("myText");
+// const fileNameInput = document.getElementById("myFileName");
 
-// document.getElementById("myBtn").addEventListener("click", ()=> {
-//   headerInfo.innerText = "Przesyłam zdjęcie...";
+// document.getElementById("myBtn").addEventListener("click", () => {
+//   headerInfo.innerText = "Przesyłam zdjęcię....!";
 
-//   const file = document.getElementById("myFile").files[0];
-//   let fileName = file.name;
+// const file = document.getElementById("myFile").files[0];
+// let fileName = file.name;
 
-//   if(fileNameInput.value){
-//     fileName = fileNameInput.value;
-//   }
+// if (fileNameInput.value) {
+//   fileName = fileNameInput.value;
+// }
 
-//   const imageRef = ref(storage, fileName);
+// const imageRef = ref(storage, folderName ,fileName);
 
 // uploadBytes(imageRef, file).then(() => {
-//     headerInfo.innerText = "Zdjęcie przesłane!";
+//   headerInfo.innerText = "Zdjęcie przesłano!";
 
 //     getDownloadURL(imageRef).then(url => {
 //       const img = document.getElementById("myPhoto");
 //       img.src = url;
 //       img.style.width = "250px";
 //     })
-//   }) 
+//   })
 // })
 
-// POBIERANIE ZDJĘCIA
-
-// const imageRef = ref(storage, "WTF.jpg");
-// getDownloadURL(imageRef).then(url => {
-//   const img = document.createElement("img");
-//   img.src = url;
-//   img.style.width = "250px";
-//   document.body.appendChild(img);
-// })
-
-// ~~~~~~~~ZADANIE 3~~~~~~~~~~
-// 1. Dodac Input do podawania nazwy obrazka
-// 2. Dodac przycisk do wyswietlania obrazka
-// 3. Na klikniecie przycisku wyswietlic zdjecie
-// 4. Przekazac nazwe do refa
-// 5. Wyswietlic blad w headerInfo
+//1. Dodac Input do podawania nazwy obrazka
+//2. Dodac przycisk do wyswietlania obrazka
+//3. Na klikniecie przycisku wyswietlic zdjecie
+//4. Przekazac nazwe do refa
+//5. Wyswietlic blad w headerInfo
 
 // const myShowFileNameInput = document.getElementById("myShowFileName");
 // const showFileBtn = document.getElementById("showPhotoBtn");
+// const img = document.createElement("img");
 
 // showFileBtn.addEventListener("click", () => {
 //   const imageRef = ref(storage, myShowFileNameInput.value);
 
+//   headerInfo.innerText = "";
+
 // getDownloadURL(imageRef).then(url => {
-//   const img = document.createElement("img");
 //   img.src = url;
 //   img.style.width = "250px";
 //   document.body.appendChild(img);
 // })
-//   .catch(ex => {
-//     headerInfo.innerText = "FOTO NIE ISTNIEJE!";
-//   });
+//     .catch(ex => {
+//       headerInfo.innerText = "FOTO NIE ISTNIEJE!!!";
+//     });
 // });
+
 
 // const storageRef = ref(storage);
 // listAll(storageRef).then(res => {
-//   const myOl = document.getElementById("PhotoList");
+//   const myOl = document.getElementById("photoList");
 
 //   for (let i = 0; i < res.items.length; i++) {
 //     const myLi = document.createElement("li");
 //     const myBtn = document.createElement("button");
-//     const myDelBtn = document.createElement("button");
+//     const myRemoveBtn = document.createElement("button");
 
-  
 //     myBtn.addEventListener("click", () => {
 //       const imageRef = ref(storage, res.items[i].name);
-//       getDownloadURL(imageRef).then(url => {
-//       const myPhotos = document.getElementById("myPhotos");
-//       myPhotos.src = url;
-//       myPhotos.style.width = "100px";
-//       });
-      
-//     }) 
 
-//     myDelBtn.addEventListener("click", () => {
+//       getDownloadURL(imageRef).then(url => {
+//         const myImg = document.getElementById("myImg");
+//         myImg.src = url;
+//         myImg.style.width = "200px";
+//       });
+//     })
+
+//     myRemoveBtn.addEventListener("click", () => {
 //       const imageRef = ref(storage, res.items[i].name);
 
 //       deleteObject(imageRef).then(() => {
-//         console.log("Usunięto!")
+//         myOl.removeChild(myLi);
+//         console.log("USUNIĘTO!");
 //       });
-
 //     })
 
+//     myRemoveBtn.innerText = "Delete";
 //     myBtn.innerText = "Show photo!";
 //     myLi.innerText = res.items[i].name;
-//     myDelBtn.innerText = "Remove!";
 
 //     myLi.appendChild(myBtn);
+//     myLi.appendChild(myRemoveBtn);
 //     myOl.appendChild(myLi);
-//     myLi.appendChild(myDelBtn);
-
-//     console.log(res.items[i].name);
 //   }
 // });
 
-// // tworzymy listę albumów
 // const albumsList = document.getElementById("albumsList");
-// // tworzymy przycisk
 // const uploadPhotoBtn = document.getElementById("uploadPhoto");
-// // tworzymy input
 // const fileInput = document.getElementById("fileInput");
-// // tworzymy drugi przycisk
-// const showPhotoBtn = document.getElementById("showPhotos");
+// const showPhotosBtn = document.getElementById("showPhotos");
 
-// // tworzymy event listener na przycisku
 // uploadPhotoBtn.addEventListener("click", () => {
 //   if (albumsList.value) {
-//     // dodajemy file
 //     const file = fileInput.files[0];
-//     // tworzymy obraz i referancje do niego
 //     const imageRef = ref(storage, `${albumsList.value}/${file.name}`);
-//     // wysyłamy obraz do odpowiedniego miejsca w storage
-//     uploadBytes(imageRef, file).then(() => console.log("Suckes!"));
+//     uploadBytes(imageRef, file).then(() => console.log("SUKCES"));
 //   }
 // });
 
-// showPhotoBtn.addEventListener("click", () => {
+// showPhotosBtn.addEventListener("click", () => {
 //   const albumRef = ref(storage, albumsList.value);
 //   listAll(albumRef).then(res => {
 //     res.items.forEach(item => {
@@ -210,25 +195,18 @@ const db = getFirestore(app);
 //     })
 //   })
 // })
-// // listAll na referencji na album - const albumRef = ref(storage, albumsList.value);
-// // Wewnatrz listAll - iterujemy po items
-// // dla kazdego items tworzymy referencje - const itemRef = ref(storage, items[i].name);
-// // korzystamy z getDownloadUrl
-// // wewnatrz getDownloadUrl tworzymy IMG (za pomoca createElement) i dodaje src do img 
-// // document.body.appendChild(img);
 
-// // tworzymy referencje do storage
+// document.body.appendChild(img);
+
 // const storageRef = ref(storage);
 // listAll(storageRef).then(res => {
 //   res.prefixes.forEach(pref => {
-//     // tworzymy opcje do select
 //     const albumOption = document.createElement("option");
 //     albumOption.innerText = pref.name;
 //     albumsList.appendChild(albumOption);
 //   })
 // })
 
-// // dodanie inputów
 // const nameInput = document.getElementById("name");
 // const surnameInput = document.getElementById("surname");
 // const ageInput = document.getElementById("age");
@@ -236,32 +214,117 @@ const db = getFirestore(app);
 
 // addUserBtn.addEventListener("click", () => {
 //   const jkDoc = doc(db, "users", `${nameInput.value}${surnameInput.value}${ageInput.value}`);
-// setDoc(jkDoc, {
+//   setDoc(jkDoc, {
 //     name: nameInput.value,
 //     surname: surnameInput.value,
 //     age: ageInput.value
+//   }).then(() => console.log("SUKCES"))
+// })
+
+// const szymonDoc = doc(db, "users", "SzymonRoszyk29");
+// getDoc(szymonDoc).then(resDoc => {
+//   const szymon = resDoc.data();
+//   nameInput.value = szymon.name;
+//   surnameInput.value = szymon.surname;
+//   ageInput.value = szymon.age;
+// })
+
+// const nameInput = document.getElementById("name");
+// const surnameInput = document.getElementById("surname");
+// const ageInput = document.getElementById("age");
+// const addUserBtn = document.getElementById("addUser");
+// const usersList = document.getElementById("usersList");
+// const usersCol = collection(db, "users");
+// const editUserBtn = document.getElementById("editUser");
+// const userIdHeader = document.getElementById("userId");
+
+// addUserBtn.addEventListener("click", () => {
+//   addDoc(usersCol, {
+//     name: nameInput.value,
+//     surname: surnameInput.value,
+//     age: ageInput.value
+//   }).then(() => {
+//     generateUsersList();
 //   });
 // })
 
-// const kamilDoc = doc(db, "users", "KamilAdamczyk28");
-// getDoc(kamilDoc).then(resDoc => {
-//   const kamil = resDoc.data();
-//   nameInput.value = kamil.name;
-//   surnameInput.value = kamil.surname;
-//   ageInput.value = kamil.age;
+// function generateUsersList() {
+//   getDocs(usersCol).then(docs => {
+//     usersList.innerHTML = "";
+//     docs.forEach(myDoc => {
+//       const editBtn = document.createElement("button");
+//       const deleteBtn = document.createElement("button");
+//       const myLi = document.createElement("li");
+
+//       const myUser = myDoc.data();
+
+//       myLi.innerText = `${myUser.name} ${myUser.surname} ${myUser.age}`;
+//       editBtn.innerText = "Edit";
+//       deleteBtn.innerText = "Delete";
+
+//       editBtn.addEventListener("click", () => {
+//         nameInput.value = myUser.name;
+//         surnameInput.value = myUser.surname;
+//         ageInput.value = myUser.age;
+//         addUserBtn.style.display = "none";
+//         editUserBtn.style.display = "inline-block";
+//         userIdHeader.innerText = myDoc.id;
+//       })
+
+//       deleteBtn.addEventListener("click", () => {
+//         const userDocRef = doc(db, "users", myDoc.id);
+//         deleteDoc(userDocRef).then(() => {
+//           console.log("USUNIETO!");
+//           generateUsersList();
+//         });
+//       })
+
+//       myLi.appendChild(editBtn);
+//       myLi.appendChild(deleteBtn);
+//       usersList.appendChild(myLi);
+//     });
+//   })
+// }
+// generateUsersList();
+
+// editUserBtn.addEventListener("click", () => {
+//   const userDoc = doc(db, "users", userIdHeader.innerText);
+//   updateDoc(userDoc, {
+//     name: nameInput.value,
+//     surname: surnameInput.value,
+//     age: ageInput.value
+//   }).then(() => {
+//     userIdHeader.innerText = "";
+//     nameInput.value = "";
+//     surnameInput.value = "";
+//     ageInput.value = "";
+//     addUserBtn.style.display = "inline-block";
+//     editUserBtn.style.display = "none";
+//     generateUsersList();
+//   })
+// });
+
+// const nameInput = document.getElementById("name");
+// const searchBtn = document.getElementById("search");
+// const usersList = document.getElementById("usersList");
+
+// searchBtn.addEventListener("click", () => {
+//   const users = collection(db, "users");
+//   const usersQuery = query(users, where("name", "==", nameInput.value))
+
+//   getDocs(usersQuery).then(docs => {
+//     usersList.innerHTML = "";
+//     docs.forEach(myDoc => {
+//       const myUser = myDoc.data();
+//       const myLi = document.createElement("li");
+//       myLi.innerText = `${myUser.name} ${myUser.surname} ${myUser.age}`;
+//       usersList.appendChild(myLi);
+//     })
+//   })
 // })
 
-const nameInput = document.getElementById("name");
-const surnameInput = document.getElementById("surname");
-const ageInput = document.getElementById("age");
-const addUserBtn = document.getElementById("addUser");
-
-
-addUserBtn.addEventListener("click", () => {
-  const usersCollection = collection(db, "users");
-  addDoc(usersCollection, {
-    name: nameInput.value,
-    surname: surnameInput.value,
-    age: ageInput.value
-  }) 
+const janKowalski = ref(rdb, "users/JanId");
+set(janKowalski, {
+  name: "Jan",
+  surname: "Kowalski"
 })
